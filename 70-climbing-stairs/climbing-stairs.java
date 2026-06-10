@@ -1,17 +1,13 @@
 class Solution {
-
-    public int count(int n,int[] dp){
-        if(n==0 || n==1)return 1;
-        if(dp[n]!=0)return dp[n];
-        int l=count(n-1,dp);
-        int r=count(n-2,dp);
-        return dp[n]=l+r;
-    }
-
-
     public int climbStairs(int n) {
-        int[] dp = new int[n+1];
-        int ans = count(n,dp);
-        return ans;
+        if(n<=2)return n;
+        int one=1;
+        int two=2;
+        for(int i=2;i<n;i++){
+            int current=one+two;
+            one=two;;
+            two=current;
+        }
+        return two;
     }
 }
