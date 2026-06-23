@@ -1,33 +1,27 @@
 class Solution {
 
-    public static int f(int idx, int coins[], int amount,int dp[][]){
-        if(amount==0){
-            return 0;
-        }
-        if(idx==coins.length || amount<0)return 1000000000;
-        
-        if(dp[idx][amount]!=-1)return dp[idx][amount];
-        
-
-        int nottake = f(idx+1,coins,amount,dp);
-        int take = 1000000000;
-        if(coins[idx]<=amount)
-        take =1+f(idx,coins,amount-coins[idx],dp);
-        return dp[idx][amount] = Math.min(take,nottake);
-
-    }
+    
 
     public int coinChange(int[] coins, int amount) {
         int n=coins.length;
-        int[][] dp = new int[n][amount+1];
-        for(int row[] : dp){
-            Arrays.fill(row,-1);
+        int[][] dp = new int[n+1][amount+1];
+        int INF = 1000000000;
+        for(int i=0;i<amount+1;i++){
+            dp[n][i]=INF;
         }
-        int ans =
-            f(0, coins, amount, dp);
+        dp[n][0]=0;
+        for(int i=n-1;i>=0;i--){
+            for(int a=0;a<=amount;a++){
+                int nottake = dp[i+1][a];
+                int take = INF;
+                if(coins[i]<=a){
+                    take = 1+dp[i][a-coins[i]];
+                }
+                dp[i][a]=Math.min(take,nottake);
+            }
 
-        return ans >= 1000000000
-               ? -1
-               : ans;
+        }
+        return dp[0][amount]>=INF ? -1 : dp[0][amount];
+        
     }
 }
