@@ -1,27 +1,27 @@
 class Solution {
-
     class Pair{
-        int row;
-        int col;
-        int tm;
-        Pair(int row, int col, int tm){
-            this.row=row;
-            this.col=col;
-            this.tm=tm;
-        }
-    }
+            int row;
+            int col;
+            int time;
 
+            Pair(int row, int col, int time){
+                this.row=row;
+                this.col=col;
+                this.time=time;
+
+            }
+    };
     public int orangesRotting(int[][] grid) {
         Queue<Pair> q = new LinkedList<>();
         int n=grid.length;
-        int m=grid[0].length;
-        int[][] vis = new int[n][m];
-        int counting=0;
-        for(int i=0;i<grid.length;i++){
-            for(int j=0;j<grid[0].length;j++){
+        int m= grid[0].length;
+        int vis[][] = new int[n][m];
+        int counting = 0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
                 if(grid[i][j]==2){
-                    vis[i][j]=2;
                     q.add(new Pair(i,j,0));
+                    vis[i][j]=2;
                 }
                 else if(grid[i][j]==0){
                     vis[i][j]=0;
@@ -32,28 +32,27 @@ class Solution {
                 }
             }
         }
-        int cm=0;
-        int rm=0;
-        int[] cr = {0,1,0,-1};
-        int[] rc = {-1,0,1,0};
+        int count=0;
+        int min=0;
+        int rc[]={1,0,-1,0};
+        int cc[]={0,-1,0,1};
         while(!q.isEmpty()){
             int r=q.peek().row;
             int c=q.peek().col;
-            int t=q.peek().tm;
-            rm=Math.max(rm,t);
+            int rm=q.peek().time;
+            min=Math.max(min,rm);
             q.remove();
-
             for(int i=0;i<4;i++){
-                int nrow=r+rc[i];
-                int ncol=c+cr[i];
-                if(nrow>=0 && ncol>=0 && nrow<n && ncol<m && vis[nrow][ncol]==0 && grid[nrow][ncol]==1){
-                    q.add(new Pair(nrow,ncol,t+1));
-                    vis[nrow][ncol]=1;
-                    cm++;
+                int ir = r+rc[i];
+                int ic = c+cc[i];
+                if(ir>=0 && ir <n && ic >=0 && ic<m && vis[ir][ic]==0 && grid[ir][ic]==1){
+                    count++;
+                    vis[ir][ic]=2;
+                    q.add(new Pair(ir,ic,rm+1));
                 }
             }
         }
-        if(cm!=counting)return -1;
-        return rm;
+        if(count!=counting)return -1;
+        return min;
     }
 }
